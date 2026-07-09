@@ -1,0 +1,26 @@
+name: Feature request
+description: Do you have an idea? Say it here!
+title: "[IDEA] "
+labels:
+  - enhancement
+assignees:
+  - v38armageddon
+body:
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: Is your feature request related to a problem? Please describe.
+      description: A clear and concise description of what the problem is.
+      placeholder: Describe the problem here...
+  - type: textarea
+    id: solution_description
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen.
+      placeholder: Describe the solution here...
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.
+      placeholder: Add additional context here...

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerable
+    url: mailto:security@v38armageddon.net
+    about: Found a security vulnerable? Please read the SECURITY.md file before reaching here.

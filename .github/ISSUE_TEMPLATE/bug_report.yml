@@ -1,0 +1,50 @@
+name: Bug report
+description: Found a bug? Report here!
+title: "[BUG] "
+labels:
+  - need testing
+assignees:
+  - v38armageddon
+body:
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug here...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: List steps to reproduce the bug here...
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+      placeholder: Add screenshots here...
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: Provide details about your operating system.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Provide the used version.
+    validations:
+      required: true
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+      placeholder: Add additional context here...

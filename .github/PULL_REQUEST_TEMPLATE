@@ -1,0 +1,18 @@
+## Description
+Please, describe why this change need to be pulled on [NAME_PROJECT_HERE].
+
+## Utility
+How this change is gonna be useful?
+
+## Tests
+Please check the tests that you have made.
+<!--Mark a X in the brackets to check-->
+- [ ] Test 1
+- [ ] Test 2
+
+## Checklist:
+<!--Mark a X in the brackets to check-->
+- [ ] My code follows the style guidelines of this project
+- [ ] My code respect the code of conduct
+- [ ] I have performed a self-review of my own code
+- [ ] My changes generate no new warnings or errors
