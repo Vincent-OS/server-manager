@@ -1,14 +1,14 @@
-# Contribute to [NAME_PROJECT_HERE]
-[NAME_PROJECT_HERE] is open to all contributions! You just need to respect the code of conduct.
+# Contribute to Server Manager
+Server Manager is open to all contributions! You just need to respect the code of conduct.
 
 ## How to contribute?
-You can contribute to [NAME_PROJECT_HERE] several ways:
+You can contribute to Server Manager several ways:
 - Software
 - Documentation
 - Translation
 
 ### Software
-What you need to contribute to [NAME_PROJECT_HERE]:
+What you need to contribute to Server Manager:
 1. Thing
 2. Thing
 
@@ -26,7 +26,7 @@ You can fork this repository to make change on the documentation.
 <!-- This part is optional
 ### Translation
 
-What you need to contribute to [NAME_PROJECT_HERE]:
+What you need to contribute to Server Manager:
 1. Thing
 2. Thing
 
