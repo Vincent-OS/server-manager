@@ -46,7 +46,7 @@ namespace ServerManager {
         
         private Terminal.Gui.Views.Label blank3;
         
-        private Terminal.Gui.Views.Label ipLabel;
+        private Terminal.Gui.Views.Link ipLink;
         
         private Terminal.Gui.Views.Label blank4;
         
@@ -62,10 +62,13 @@ namespace ServerManager {
         
         private Terminal.Gui.Views.Line line;
         
+        private Terminal.Gui.Views.Code systemdServiceCode;
+        
         private Terminal.Gui.Views.Line line2;
         
         private void InitializeComponent() {
             this.line2 = new Terminal.Gui.Views.Line();
+            this.systemdServiceCode = new Terminal.Gui.Views.Code();
             this.line = new Terminal.Gui.Views.Line();
             this.storageLabel = new Terminal.Gui.Views.Label();
             this.blank6 = new Terminal.Gui.Views.Label();
@@ -73,7 +76,7 @@ namespace ServerManager {
             this.blank5 = new Terminal.Gui.Views.Label();
             this.cpuLabel = new Terminal.Gui.Views.Label();
             this.blank4 = new Terminal.Gui.Views.Label();
-            this.ipLabel = new Terminal.Gui.Views.Label();
+            this.ipLink = new Terminal.Gui.Views.Link();
             this.blank3 = new Terminal.Gui.Views.Label();
             this.appArmorLabel = new Terminal.Gui.Views.Label();
             this.label = new Terminal.Gui.Views.Label();
@@ -221,17 +224,18 @@ namespace ServerManager {
             this.blank3.Text = "IP Addresses:";
             this.blank3.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.Add(this.blank3);
-            this.ipLabel.Width = Dim.Auto();
-            this.ipLabel.Height = Dim.Auto();
-            this.ipLabel.X = 16;
-            this.ipLabel.Y = 4;
-            this.ipLabel.Visible = true;
-            this.ipLabel.CanFocus = false;
-            this.ipLabel.ShadowStyle = null;
-            this.ipLabel.Data = "ipLabel";
-            this.ipLabel.Text = "UI_IPADDRESSES";
-            this.ipLabel.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
-            this.Add(this.ipLabel);
+            this.ipLink.Width = Dim.Auto();
+            this.ipLink.Height = Dim.Auto();
+            this.ipLink.X = 16;
+            this.ipLink.Y = 4;
+            this.ipLink.Visible = true;
+            this.ipLink.CanFocus = true;
+            this.ipLink.ShadowStyle = null;
+            this.ipLink.Url = "";
+            this.ipLink.Data = "ipLink";
+            this.ipLink.Text = "UI_IPADDRESSES";
+            this.ipLink.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
+            this.Add(this.ipLink);
             this.blank4.Width = Dim.Auto();
             this.blank4.Height = Dim.Auto();
             this.blank4.X = 2;
@@ -300,8 +304,8 @@ namespace ServerManager {
             this.Add(this.storageLabel);
             this.line.Width = Dim.Fill(0);
             this.line.Height = 1;
-            this.line.X = -1;
-            this.line.Y = 16;
+            this.line.X = 0;
+            this.line.Y = 10;
             this.line.Visible = true;
             this.line.CanFocus = false;
             this.line.ShadowStyle = null;
@@ -309,16 +313,27 @@ namespace ServerManager {
             this.line.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.line.Orientation = Terminal.Gui.ViewBase.Orientation.Horizontal;
             this.Add(this.line);
-            this.line2.Width = 1;
-            this.line2.Height = Dim.Fill(0);
-            this.line2.X = 61;
-            this.line2.Y = 16;
+            this.systemdServiceCode.Width = 119;
+            this.systemdServiceCode.Height = 9;
+            this.systemdServiceCode.X = 0;
+            this.systemdServiceCode.Y = 11;
+            this.systemdServiceCode.Visible = true;
+            this.systemdServiceCode.CanFocus = false;
+            this.systemdServiceCode.ShadowStyle = null;
+            this.systemdServiceCode.Data = "systemdServiceCode";
+            this.systemdServiceCode.Text = "";
+            this.systemdServiceCode.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
+            this.Add(this.systemdServiceCode);
+            this.line2.Width = Dim.Fill(0);
+            this.line2.Height = 1;
+            this.line2.X = -1;
+            this.line2.Y = 20;
             this.line2.Visible = true;
             this.line2.CanFocus = false;
             this.line2.ShadowStyle = null;
             this.line2.Data = "line2";
-            this.line2.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
-            this.line2.Orientation = Terminal.Gui.ViewBase.Orientation.Vertical;
+            this.line2.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
+            this.line2.Orientation = Terminal.Gui.ViewBase.Orientation.Horizontal;
             this.Add(this.line2);
         }
     }

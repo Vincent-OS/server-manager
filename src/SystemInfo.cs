@@ -8,12 +8,36 @@ namespace ServerManager;
 
 public class SystemInfo
 {
-	public static string GetLocalIPAddresses()
+    #region System Information
+    public static string GetLocalIPAddresses()
 	{
 		IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-		return string.Join(", ", localIPs);
+        var ipv4Addresses = localIPs
+            .Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            .ToList();
+        var ipv6Addresses = localIPs
+            .Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+            .ToList();
+        string ipv4Result = ipv4Addresses.Count switch
+        {
+            0 => IPAddress.Loopback.ToString(),
+            1 => ipv4Addresses[0].ToString(),
+            _ => "Multiple IP Addresses"
+        };
+        if (ipv6Addresses.Count > 0)
+        {
+            return string.Join(", ", ipv4Result) + ", Compatible IPv6";
+        }
+        else
+        {
+            return string.Join(", ", ipv4Result);
+        }
 	}
 
+	// ! This implementation depends on the system having the following file:
+	// ! /etc/sudoers.d/ufwstatus
+	// ! To permit getting information without a password prompt.
+	// ! If not present, program will bug out due to sudo blocking the process.
 	public static string GetUFWStatus()
 	{
 		var process = new System.Diagnostics.Process
@@ -39,6 +63,22 @@ public class SystemInfo
 			default:
 				return "Unknown";
 		}
+	}
+
+	public static string GetAppArmorStatus()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		{
+			var grubLSMLine = File.ReadAllLines("/etc/default/grub").FirstOrDefault(line => line.StartsWith("GRUB_CMDLINE_LINUX="));
+			switch (grubLSMLine)
+			{
+				case string s when s.Contains("lsm=landlock,lockdown,yama,integrity,apparmor,bpf"):
+					return "Enabled";
+				default:
+					return "Disabled";
+			}
+		}
+		return "Unknown";
 	}
 
 	public static string GetCPU()
@@ -71,46 +111,71 @@ public class SystemInfo
 		return "Unknown";
 	}
 
-    public static string FormatMemorySize(long kb)
+    public static string GetServices()
     {
-        string[] sizes = { "KB", "MB", "GB", "TB" };
-        double len = kb;
-        int order = 0;
-
-        while (len >= 1024 && order < sizes.Length - 1)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            order++;
-            len /= 1024;
+            var process = new System.Diagnostics.Process
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "systemctl",
+                    Arguments = "list-units --type=service",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                }
+            };
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            return output;
         }
-
-        return $"{len:0.##} {sizes[order]}";
+        return "Unknown";
     }
+    #endregion
+    #region Format
+    public static string FormatMemorySize(long kb)
+	{
+		string[] sizes = { "KB", "MB", "GB", "TB" };
+		double len = kb;
+		int order = 0;
 
-    public static string GetTotalStorageBytes(string path = "/")
+		while (len >= 1024 && order < sizes.Length - 1)
+		{
+			order++;
+			len /= 1024;
+		}
+
+		return $"{len:0.##} {sizes[order]}";
+	}
+
+	public static string GetTotalStorageBytes(string path = "/")
 	{
 		try
 		{
 			var driveInfo = new DriveInfo(path);
-            return FormatStorageSize(driveInfo.TotalSize);
-        }
+			return FormatStorageSize(driveInfo.TotalSize);
+		}
 		catch
 		{
 			return "Unknown";
 		}
 	}
 
-    public static string FormatStorageSize(long bytes)
-    {
-        string[] sizes = { "B", "KB", "MB", "GB", "TB" };
-        double len = bytes;
-        int order = 0;
+	public static string FormatStorageSize(long bytes)
+	{
+		string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+		double len = bytes;
+		int order = 0;
 
-        while (len >= 1024 && order < sizes.Length - 1)
-        {
-            order++;
-            len /= 1024;
-        }
+		while (len >= 1024 && order < sizes.Length - 1)
+		{
+			order++;
+			len /= 1024;
+		}
 
-        return $"{len:0.##} {sizes[order]}";
-    }
+		return $"{len:0.##} {sizes[order]}";
+	}
+    #endregion
 }

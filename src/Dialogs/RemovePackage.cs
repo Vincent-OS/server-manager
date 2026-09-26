@@ -10,15 +10,15 @@ using Terminal.Gui.Views;
 
 namespace ServerManager.Dialogs;
 
-public partial class InstallPackage
+public partial class RemovePackage
 {
-	public InstallPackage()
+	public RemovePackage()
 	{
 		InitializeComponent();
-		installButton.Accepted += InstallButtonAccepted;
+		removeButton.Accepted += RemoveButtonAccepted;
 	}
 
-	private void InstallButtonAccepted(object? sender, EventArgs e)
+	private void RemoveButtonAccepted(object? sender, EventArgs e)
 	{
 		if (packagesField.Text == "")
 		{
@@ -32,9 +32,7 @@ public partial class InstallPackage
 			StartInfo = new System.Diagnostics.ProcessStartInfo
 			{
 				FileName = "sudo",
-				Arguments = "/usr/bin/pacman -S " + string.Join(" ", packages),
-				RedirectStandardOutput = false,
-				RedirectStandardError = false,
+				Arguments = "/usr/bin/pacman -R " + string.Join(" ", packages),
 				UseShellExecute = true,
 				CreateNoWindow = false,
 			}
