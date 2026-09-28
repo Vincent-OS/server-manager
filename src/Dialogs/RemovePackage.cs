@@ -16,13 +16,14 @@ public partial class RemovePackage
 	{
 		InitializeComponent();
 		removeButton.Accepted += RemoveButtonAccepted;
+		cancelButton.Accepted += (s, e) => this.RequestStop();
 	}
 
 	private void RemoveButtonAccepted(object? sender, EventArgs e)
 	{
 		if (packagesField.Text == "")
 		{
-			MessageBox.ErrorQuery(this.App, "Error", "Please enter a package name.", "OK");
+			MessageBox.ErrorQuery(null, "Error", "Please enter a package name.", "OK");
 			return;
 		}
 		// Create an list of packages separated by space
@@ -38,5 +39,14 @@ public partial class RemovePackage
 			}
 		};
 		process.Start();
+		process.WaitForExit();
+		if (process.ExitCode == 0)
+		{
+			MessageBox.Query(null, "Success", "Package(s) removed successfully.", "OK");
+		}
+		else
+		{
+			MessageBox.ErrorQuery(null, "Error", "Failed to remove package(s).", "OK");
+		}
 	}
 }

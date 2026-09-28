@@ -10,30 +10,28 @@ using Terminal.Gui.Views;
 
 namespace ServerManager.Dialogs;
 
-public partial class InstallPackage
+public partial class ChangeHostname
 {
-	public InstallPackage()
+	public ChangeHostname()
 	{
 		InitializeComponent();
-		installButton.Accepted += InstallButtonAccepted;
+		renameButton.Accepted += RenameButtonAccepted;
 		cancelButton.Accepted += (s, e) => this.RequestStop();
 	}
 
-	private void InstallButtonAccepted(object? sender, EventArgs e)
+	private void RenameButtonAccepted(object? sender, EventArgs e)
 	{
-		if (packagesField.Text == "")
+		if (hostnameField.Text == "")
 		{
-			MessageBox.ErrorQuery(null, "Error", "Please enter a package name.", "OK");
+			MessageBox.ErrorQuery(null, "Error", "Please enter a hostname.", "OK");
 			return;
 		}
-		// Create an list of packages separated by space
-		var packages = packagesField.Text.ToString().Split(' ').ToList();
 		var process = new System.Diagnostics.Process
 		{
 			StartInfo = new System.Diagnostics.ProcessStartInfo
 			{
-				FileName = "sudo",
-				Arguments = "/usr/bin/pacman -S " + string.Join(" ", packages),
+				FileName = "hostnamectl",
+				Arguments = "set-hostname " + hostnameField.Text,
 				RedirectStandardOutput = false,
 				RedirectStandardError = false,
 				UseShellExecute = true,
@@ -42,13 +40,9 @@ public partial class InstallPackage
 		};
 		process.Start();
 		process.WaitForExit();
-		if (process.ExitCode == 0)
-		{
-			MessageBox.Query(null, "Success", "Package(s) installed successfully.", "OK");
-		}
-		else
-		{
-			MessageBox.ErrorQuery(null, "Error", "Failed to install package(s).", "OK");
-		}
-	}
+        if (process.ExitCode != 0)
+        {
+			MessageBox.ErrorQuery(null, "Error", "Failed to set the new hostname to: " + hostnameField.Text, "OK");
+        }
+    }
 }

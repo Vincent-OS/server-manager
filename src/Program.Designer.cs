@@ -66,7 +66,10 @@ namespace ServerManager {
         
         private Terminal.Gui.Views.Line line2;
         
+        private Terminal.Gui.Views.Code journalctlCode;
+        
         private void InitializeComponent() {
+            this.journalctlCode = new Terminal.Gui.Views.Code();
             this.line2 = new Terminal.Gui.Views.Line();
             this.systemdServiceCode = new Terminal.Gui.Views.Code();
             this.line = new Terminal.Gui.Views.Line();
@@ -335,6 +338,17 @@ namespace ServerManager {
             this.line2.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.line2.Orientation = Terminal.Gui.ViewBase.Orientation.Horizontal;
             this.Add(this.line2);
+            this.journalctlCode.Width = 119;
+            this.journalctlCode.Height = 9;
+            this.journalctlCode.X = 0;
+            this.journalctlCode.Y = 20;
+            this.journalctlCode.Visible = true;
+            this.journalctlCode.CanFocus = false;
+            this.journalctlCode.ShadowStyle = null;
+            this.journalctlCode.Data = "journalctlCode";
+            this.journalctlCode.Text = "";
+            this.journalctlCode.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
+            this.Add(this.journalctlCode);
         }
     }
 }

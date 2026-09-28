@@ -69,6 +69,7 @@ public class SystemInfo
 	{
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
+			if (!Directory.Exists("/etc/apparmor")) return "Unknown";
 			var grubLSMLine = File.ReadAllLines("/etc/default/grub").FirstOrDefault(line => line.StartsWith("GRUB_CMDLINE_LINUX="));
 			switch (grubLSMLine)
 			{
@@ -133,6 +134,29 @@ public class SystemInfo
         }
         return "Unknown";
     }
+
+	public static string GetSystemLogs()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		{
+			var process = new System.Diagnostics.Process
+			{
+				StartInfo = new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "journalctl",
+					Arguments = "-b",
+					RedirectStandardOutput = true,
+					UseShellExecute = false,
+					CreateNoWindow = true
+				}
+			};
+			process.Start();
+			string output = process.StandardOutput.ReadToEnd();
+			process.WaitForExit();
+			return output;
+		}
+		return "Unknown";
+	}
     #endregion
     #region Format
     public static string FormatMemorySize(long kb)
