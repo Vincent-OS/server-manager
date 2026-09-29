@@ -316,8 +316,8 @@ namespace ServerManager {
             this.line.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.line.Orientation = Terminal.Gui.ViewBase.Orientation.Horizontal;
             this.Add(this.line);
-            this.systemdServiceCode.Width = 119;
-            this.systemdServiceCode.Height = 9;
+            this.systemdServiceCode.Width = Dim.Auto();
+            this.systemdServiceCode.Height = Dim.Auto();
             this.systemdServiceCode.X = 0;
             this.systemdServiceCode.Y = 11;
             this.systemdServiceCode.Visible = true;
@@ -338,8 +338,8 @@ namespace ServerManager {
             this.line2.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.line2.Orientation = Terminal.Gui.ViewBase.Orientation.Horizontal;
             this.Add(this.line2);
-            this.journalctlCode.Width = 119;
-            this.journalctlCode.Height = 9;
+            this.journalctlCode.Width = Dim.Auto();
+            this.journalctlCode.Height = Dim.Auto();
             this.journalctlCode.X = 0;
             this.journalctlCode.Y = 20;
             this.journalctlCode.Visible = true;
