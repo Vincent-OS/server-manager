@@ -4,10 +4,12 @@
 //        TerminalGuiDesigner v2.4.5.0
 //      You can make changes to this file and they will not be overwritten when saving.
 //  </auto-generated>
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------- 
 #pragma warning disable CS0618 // This is necessary to put because Terminal.Gui needs this to run.
 using ServerManager.Dialogs;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Terminal.Gui;
 using Terminal.Gui.App;
 using Terminal.Gui.Input;
@@ -43,43 +45,50 @@ public partial class Program
 		Application.Run<Program>();
 	}
 	#region Quick Action
-	private static void InstallPackageButtonAccepted(object? sender, EventArgs e)
+	private void InstallPackageButtonAccepted(object? sender, EventArgs e)
 	{
 		InstallPackage installPackage = new InstallPackage();
 		Application.Run(installPackage);
 	}
 
-	private static void RemovePackageButtonAccepted(object? sender, EventArgs e)
+	private void RemovePackageButtonAccepted(object? sender, EventArgs e)
 	{
 		RemovePackage removePackage = new RemovePackage();
 		Application.Run(removePackage);
 	}
 
-	private static void ServicesButtonAccepted(object? sender, EventArgs e)
+	private void ServicesButtonAccepted(object? sender, EventArgs e)
 	{
-		
+		MessageBox.Query(this.App, "TITLE", "Not implemented", "OK");
 	}
 	#endregion
 	#region System Information
-	private static void HostnameLinkAccepted(object? sender, EventArgs e)
+	private void HostnameLinkAccepted(object? sender, EventArgs e)
 	{
 		ChangeHostname changeHostname = new ChangeHostname();
 		Application.Run(changeHostname);
 	}
 
-	private static void IPLinkAccepted(object? sender, EventArgs e)
+	private void IPLinkAccepted(object? sender, EventArgs e)
 	{
-		var process = new System.Diagnostics.Process
+		try
 		{
-			StartInfo = new System.Diagnostics.ProcessStartInfo
+			var process = new System.Diagnostics.Process
 			{
-				FileName = "nmtui",
-				UseShellExecute = false,
-				CreateNoWindow = false
-			}
-		};
-		process.Start();
-		process.WaitForExit();
+				StartInfo = new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "nmtui",
+					UseShellExecute = false,
+					CreateNoWindow = false
+				}
+			};
+			process.Start();
+			process.WaitForExit();
+		}
+		catch (Exception ex)
+		{
+			MessageBox.ErrorQuery(this.App, "Error", $"{ex.Message}", "OK");
+		}
 	}
 	#endregion
 }

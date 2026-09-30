@@ -19,21 +19,23 @@ public partial class RemovePackage
 		cancelButton.Accepted += (s, e) => this.RequestStop();
 	}
 
-	private void RemoveButtonAccepted(object? sender, EventArgs e)
+	public void RemoveButtonAccepted(object? sender, EventArgs e)
 	{
 		if (packagesField.Text == "")
 		{
-			MessageBox.ErrorQuery(null, "Error", "Please enter a package name.", "OK");
+			MessageBox.ErrorQuery(this.App, "Error", "Please enter a package name.", "OK");
 			return;
 		}
 		// Create an list of packages separated by space
 		var packages = packagesField.Text.ToString().Split(' ').ToList();
+		// HACK: Should we really rely on screen to show the command?
+		// Maybe there is a better way to do this, to avoid relying on dependencies hell.
 		var process = new System.Diagnostics.Process
 		{
 			StartInfo = new System.Diagnostics.ProcessStartInfo
 			{
-				FileName = "sudo",
-				Arguments = "/usr/bin/pacman -R " + string.Join(" ", packages),
+				FileName = "screen",
+				Arguments = "-S sudo /usr/bin/pacman -R " + string.Join(" ", packages),
 				UseShellExecute = true,
 				CreateNoWindow = false,
 			}
@@ -42,11 +44,12 @@ public partial class RemovePackage
 		process.WaitForExit();
 		if (process.ExitCode == 0)
 		{
-			MessageBox.Query(null, "Success", "Package(s) removed successfully.", "OK");
+			MessageBox.Query(this.App, "Success", "Package(s) removed successfully.", "OK");
 		}
 		else
 		{
-			MessageBox.ErrorQuery(null, "Error", "Failed to remove package(s).", "OK");
+			MessageBox.ErrorQuery(this.App, "Error", "Failed to remove package(s).", "OK");
 		}
+		this.RequestStop();
 	}
 }

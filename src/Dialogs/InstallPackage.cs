@@ -23,7 +23,7 @@ public partial class InstallPackage
 	{
 		if (packagesField.Text == "")
 		{
-			MessageBox.ErrorQuery(null, "Error", "Please enter a package name.", "OK");
+			MessageBox.ErrorQuery(this.App, "Error", "Please enter a package name.", "OK");
 			return;
 		}
 		// Create an list of packages separated by space
@@ -32,8 +32,8 @@ public partial class InstallPackage
 		{
 			StartInfo = new System.Diagnostics.ProcessStartInfo
 			{
-				FileName = "sudo",
-				Arguments = "/usr/bin/pacman -S " + string.Join(" ", packages),
+				FileName = "screen",
+				Arguments = "-S sudo /usr/bin/pacman -S " + string.Join(" ", packages),
 				RedirectStandardOutput = false,
 				RedirectStandardError = false,
 				UseShellExecute = true,
@@ -44,11 +44,12 @@ public partial class InstallPackage
 		process.WaitForExit();
 		if (process.ExitCode == 0)
 		{
-			MessageBox.Query(null, "Success", "Package(s) installed successfully.", "OK");
+			MessageBox.Query(this.App, "Success", "Package(s) installed successfully.", "OK");
 		}
 		else
 		{
-			MessageBox.ErrorQuery(null, "Error", "Failed to install package(s).", "OK");
+			MessageBox.ErrorQuery(this.App, "Error", "Failed to install package(s).", "OK");
 		}
+		this.RequestStop();
 	}
 }

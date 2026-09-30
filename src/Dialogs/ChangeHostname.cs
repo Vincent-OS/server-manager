@@ -42,7 +42,8 @@ public partial class ChangeHostname
 		process.WaitForExit();
         if (process.ExitCode != 0)
         {
-			MessageBox.ErrorQuery(null, "Error", "Failed to set the new hostname to: " + hostnameField.Text, "OK");
+			MessageBox.ErrorQuery(this.App, "Error", "Failed to set the new hostname to: " + hostnameField.Text, "OK");
         }
+		this.RequestStop();
     }
 }

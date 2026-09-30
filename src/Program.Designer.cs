@@ -24,14 +24,6 @@ namespace ServerManager {
     
     public partial class Program : Terminal.Gui.Views.Window {
         
-        private Terminal.Gui.Views.FrameView quickActionView;
-        
-        private Terminal.Gui.Views.Button installPackageButton;
-        
-        private Terminal.Gui.Views.Button removePackageButton;
-        
-        private Terminal.Gui.Views.Button servicesButton;
-        
         private Terminal.Gui.Views.Label blank;
         
         private Terminal.Gui.Views.Link hostnameLink;
@@ -39,6 +31,8 @@ namespace ServerManager {
         private Terminal.Gui.Views.Label blank2;
         
         private Terminal.Gui.Views.Label ufwLabel;
+        
+        private Terminal.Gui.Views.Button installPackageButton;
         
         private Terminal.Gui.Views.Label label;
         
@@ -48,6 +42,8 @@ namespace ServerManager {
         
         private Terminal.Gui.Views.Link ipLink;
         
+        private Terminal.Gui.Views.Button removePackageButton;
+        
         private Terminal.Gui.Views.Label blank4;
         
         private Terminal.Gui.Views.Label cpuLabel;
@@ -55,6 +51,8 @@ namespace ServerManager {
         private Terminal.Gui.Views.Label blank5;
         
         private Terminal.Gui.Views.Label ramLabel;
+        
+        private Terminal.Gui.Views.Button servicesButton;
         
         private Terminal.Gui.Views.Label blank6;
         
@@ -75,22 +73,21 @@ namespace ServerManager {
             this.line = new Terminal.Gui.Views.Line();
             this.storageLabel = new Terminal.Gui.Views.Label();
             this.blank6 = new Terminal.Gui.Views.Label();
+            this.servicesButton = new Terminal.Gui.Views.Button();
             this.ramLabel = new Terminal.Gui.Views.Label();
             this.blank5 = new Terminal.Gui.Views.Label();
             this.cpuLabel = new Terminal.Gui.Views.Label();
             this.blank4 = new Terminal.Gui.Views.Label();
+            this.removePackageButton = new Terminal.Gui.Views.Button();
             this.ipLink = new Terminal.Gui.Views.Link();
             this.blank3 = new Terminal.Gui.Views.Label();
             this.appArmorLabel = new Terminal.Gui.Views.Label();
             this.label = new Terminal.Gui.Views.Label();
+            this.installPackageButton = new Terminal.Gui.Views.Button();
             this.ufwLabel = new Terminal.Gui.Views.Label();
             this.blank2 = new Terminal.Gui.Views.Label();
             this.hostnameLink = new Terminal.Gui.Views.Link();
             this.blank = new Terminal.Gui.Views.Label();
-            this.servicesButton = new Terminal.Gui.Views.Button();
-            this.removePackageButton = new Terminal.Gui.Views.Button();
-            this.installPackageButton = new Terminal.Gui.Views.Button();
-            this.quickActionView = new Terminal.Gui.Views.FrameView();
             this.Width = Dim.Fill(0);
             this.Height = Dim.Fill(0);
             this.X = 0;
@@ -101,54 +98,6 @@ namespace ServerManager {
             this.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.None;
             this.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.Title = "Vincent OS Server Manager";
-            this.quickActionView.Width = 30;
-            this.quickActionView.Height = 10;
-            this.quickActionView.X = 88;
-            this.quickActionView.Y = 0;
-            this.quickActionView.Visible = true;
-            this.quickActionView.Arrangement = Terminal.Gui.ViewBase.ViewArrangement.Fixed;
-            this.quickActionView.CanFocus = true;
-            this.quickActionView.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.None;
-            this.quickActionView.Data = "quickActionView";
-            this.quickActionView.TextAlignment = Terminal.Gui.ViewBase.Alignment.End;
-            this.quickActionView.Title = "Quick actions";
-            this.Add(this.quickActionView);
-            this.installPackageButton.Width = Dim.Auto();
-            this.installPackageButton.Height = Dim.Auto();
-            this.installPackageButton.X = 1;
-            this.installPackageButton.Y = 1;
-            this.installPackageButton.Visible = true;
-            this.installPackageButton.CanFocus = true;
-            this.installPackageButton.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.Opaque;
-            this.installPackageButton.Data = "installPackageButton";
-            this.installPackageButton.Text = "Install packages";
-            this.installPackageButton.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
-            this.installPackageButton.IsDefault = false;
-            this.quickActionView.Add(this.installPackageButton);
-            this.removePackageButton.Width = Dim.Auto();
-            this.removePackageButton.Height = Dim.Auto();
-            this.removePackageButton.X = 1;
-            this.removePackageButton.Y = 3;
-            this.removePackageButton.Visible = true;
-            this.removePackageButton.CanFocus = true;
-            this.removePackageButton.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.Opaque;
-            this.removePackageButton.Data = "removePackageButton";
-            this.removePackageButton.Text = "Remove packages";
-            this.removePackageButton.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
-            this.removePackageButton.IsDefault = false;
-            this.quickActionView.Add(this.removePackageButton);
-            this.servicesButton.Width = Dim.Auto();
-            this.servicesButton.Height = Dim.Auto();
-            this.servicesButton.X = 1;
-            this.servicesButton.Y = 5;
-            this.servicesButton.Visible = true;
-            this.servicesButton.CanFocus = true;
-            this.servicesButton.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.Opaque;
-            this.servicesButton.Data = "servicesButton";
-            this.servicesButton.Text = "Manage services";
-            this.servicesButton.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
-            this.servicesButton.IsDefault = false;
-            this.quickActionView.Add(this.servicesButton);
             this.blank.Width = Dim.Auto();
             this.blank.Height = Dim.Auto();
             this.blank.X = 2;
@@ -160,7 +109,7 @@ namespace ServerManager {
             this.blank.Text = "Hostname:";
             this.blank.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.Add(this.blank);
-            this.hostnameLink.Width = 19;
+            this.hostnameLink.Width = Dim.Auto();
             this.hostnameLink.Height = 1;
             this.hostnameLink.X = 12;
             this.hostnameLink.Y = 1;
@@ -194,6 +143,18 @@ namespace ServerManager {
             this.ufwLabel.Text = "UI_UFW";
             this.ufwLabel.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.Add(this.ufwLabel);
+            this.installPackageButton.Width = Dim.Auto();
+            this.installPackageButton.Height = Dim.Auto();
+            this.installPackageButton.X = 94;
+            this.installPackageButton.Y = 2;
+            this.installPackageButton.Visible = true;
+            this.installPackageButton.CanFocus = true;
+            this.installPackageButton.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.Opaque;
+            this.installPackageButton.Data = "installPackageButton";
+            this.installPackageButton.Text = "Install packages";
+            this.installPackageButton.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
+            this.installPackageButton.IsDefault = false;
+            this.Add(this.installPackageButton);
             this.label.Width = Dim.Auto();
             this.label.Height = Dim.Auto();
             this.label.X = 2;
@@ -239,6 +200,18 @@ namespace ServerManager {
             this.ipLink.Text = "UI_IPADDRESSES";
             this.ipLink.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.Add(this.ipLink);
+            this.removePackageButton.Width = Dim.Auto();
+            this.removePackageButton.Height = Dim.Auto();
+            this.removePackageButton.X = 94;
+            this.removePackageButton.Y = 4;
+            this.removePackageButton.Visible = true;
+            this.removePackageButton.CanFocus = true;
+            this.removePackageButton.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.Opaque;
+            this.removePackageButton.Data = "removePackageButton";
+            this.removePackageButton.Text = "Remove packages";
+            this.removePackageButton.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
+            this.removePackageButton.IsDefault = false;
+            this.Add(this.removePackageButton);
             this.blank4.Width = Dim.Auto();
             this.blank4.Height = Dim.Auto();
             this.blank4.X = 2;
@@ -283,6 +256,18 @@ namespace ServerManager {
             this.ramLabel.Text = "UI_RAM";
             this.ramLabel.TextAlignment = Terminal.Gui.ViewBase.Alignment.Start;
             this.Add(this.ramLabel);
+            this.servicesButton.Width = Dim.Auto();
+            this.servicesButton.Height = Dim.Auto();
+            this.servicesButton.X = 94;
+            this.servicesButton.Y = 6;
+            this.servicesButton.Visible = true;
+            this.servicesButton.CanFocus = true;
+            this.servicesButton.ShadowStyle = Terminal.Gui.ViewBase.ShadowStyles.Opaque;
+            this.servicesButton.Data = "servicesButton";
+            this.servicesButton.Text = "Manage services";
+            this.servicesButton.TextAlignment = Terminal.Gui.ViewBase.Alignment.Center;
+            this.servicesButton.IsDefault = false;
+            this.Add(this.servicesButton);
             this.blank6.Width = Dim.Auto();
             this.blank6.Height = Dim.Auto();
             this.blank6.X = 2;
