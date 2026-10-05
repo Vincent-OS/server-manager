@@ -33,7 +33,6 @@ public partial class Program
 		systemdServiceCode.Text = SystemInfo.GetServices();
 		journalctlCode.Text = SystemInfo.GetSystemLogs();
 		// Functions to link
-		menuBar.Accepted += MenuBarSelectedMenuItemChanged;
 		hostnameLink.Accepted += HostnameLinkAccepted;
 		ipLink.Accepted += IPLinkAccepted;
 	}
@@ -41,33 +40,6 @@ public partial class Program
 	public static void Main(string[] args)
 	{
 		Application.Run<Program>();
-	}
-
-	// FIXME: Bogus, broken and poor implementation. Change ASAP!
-	private void MenuBarSelectedMenuItemChanged(object? sender, CommandEventArgs e)
-	{
-		var selected = (sender as Menu)?.SelectedMenuItem;
-		switch (selected)
-		{
-			case var m when m == aboutVincentOSServerManagerMenuItem:
-				MessageBox.Query(this.App, "About Vincent OS Server Manager", "Server Manager\nVersion 1.0.0\nAuthor: v38armageddon", "OK");
-				break;
-			case var m when m == exitMenuItem:
-				Application.RequestStop();
-				break;
-			case var m when m == installPackagesMenuItem:
-				InstallPackageButtonAccepted(sender, EventArgs.Empty);
-				break;
-			case var m when m == removePackagesMenuItem:
-				RemovePackageButtonAccepted(sender, EventArgs.Empty);
-				break;
-			case var m when m == manageServicesMenuItem:
-				ServicesButtonAccepted(sender, EventArgs.Empty);
-				break;
-			default:
-				MessageBox.ErrorQuery(this.App, "ERROR", "BROKEN_FUNCTION_WTF", "OK");
-				break;
-		}
 	}
 
 	#region Quick Action
