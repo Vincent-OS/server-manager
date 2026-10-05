@@ -322,11 +322,13 @@ namespace ServerManager {
             this.aboutVincentOSServerManagerMenuItem.Title = "About Vincent OS Server Manager";
             this.exitMenuItem = new Terminal.Gui.Views.MenuItem();
             this.exitMenuItem.Title = "Exit";
-            this.fileMenu.PopoverMenu = new PopoverMenu([aboutVincentOSServerManagerMenuItem,exitMenuItem]);
+            this.exitMenuItem.Key = new Key("Esc");
+			this.fileMenu.PopoverMenu = new PopoverMenu([aboutVincentOSServerManagerMenuItem,exitMenuItem]);
             this.menuBar.Add(this.fileMenu);
             this.quickActionMenu = new Terminal.Gui.Views.MenuBarItem();
             this.quickActionMenu.Title = "Quick Action";
-            this.installPackagesMenuItem = new Terminal.Gui.Views.MenuItem();
+            this.quickActionMenu.Key = new Key("F10");
+			this.installPackagesMenuItem = new Terminal.Gui.Views.MenuItem();
             this.installPackagesMenuItem.Title = "Install packages";
             this.removePackagesMenuItem = new Terminal.Gui.Views.MenuItem();
             this.removePackagesMenuItem.Title = "Remove packages";
