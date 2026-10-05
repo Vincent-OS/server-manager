@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <DesignerActionValidationIgnore>Dialogs/*.Designer.cs</DesignerActionValidationIgnore>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DesignerFiles Include="$(MSBuildThisFileDirectory)/**/*.Designer.cs" Exclude="$(DesignerActionValidationIgnore)" />
+  </ItemGroup>
+
+  <Target Name="ValidateDesignerActions" BeforeTargets="CoreCompile" Condition="'@(DesignerFiles)' != ''">
+    <Message Text="Validate necessary .Action assignments" Importance="Low" />
+	 <Error
+		 Code="ERR_MISSING_ACTION"
+		 Text="'.Action' missing in: %(DesignerFiles.Identity)"
+		 Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch($([System.IO.File]::ReadAllText('%(DesignerFiles.FullPath)')), '\.Action\s*='))" />
+  </Target>
+</Project>
