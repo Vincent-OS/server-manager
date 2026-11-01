@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Porta.Pty" Version="2.2.3" />
     <PackageReference Include="Terminal.Gui" Version="2.5.0" />
   </ItemGroup>
 

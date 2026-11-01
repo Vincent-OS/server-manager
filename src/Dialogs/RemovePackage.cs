@@ -5,6 +5,8 @@
 //      You can make changes to this file and they will not be overwritten when saving.
 //  </auto-generated>
 // -----------------------------------------------------------------------------
+using Porta.Pty;
+using System.Runtime.InteropServices;
 using Terminal.Gui;
 using Terminal.Gui.Views;
 
@@ -12,6 +14,8 @@ namespace ServerManager.Dialogs;
 
 public partial class RemovePackage
 {
+	private IPtyConnection? _terminal;
+
 	public RemovePackage()
 	{
 		InitializeComponent();
@@ -19,37 +23,47 @@ public partial class RemovePackage
 		cancelButton.Accepted += (s, e) => this.RequestStop();
 	}
 
-	public void RemoveButtonAccepted(object? sender, EventArgs e)
+	private async void RemoveButtonAccepted(object? sender, EventArgs e)
 	{
 		if (packagesField.Text == "")
 		{
 			MessageBox.ErrorQuery(this.App, "Error", "Please enter a package name.", "OK");
 			return;
 		}
-		// Create an list of packages separated by space
-		var packages = packagesField.Text.ToString().Split(' ').ToList();
-		// HACK: Should we really rely on screen to show the command?
-		// Maybe there is a better way to do this, to avoid relying on dependencies hell.
-		var process = new System.Diagnostics.Process
+
+		var packages = packagesField.Text.ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+		var ptyOptions = new Porta.Pty.PtyOptions
 		{
-			StartInfo = new System.Diagnostics.ProcessStartInfo
-			{
-				FileName = "screen",
-				Arguments = "-S sudo /usr/bin/pacman -R " + string.Join(" ", packages),
-				UseShellExecute = true,
-				CreateNoWindow = false,
-			}
+			Name = "RemovePackage",
+			Cwd = Environment.CurrentDirectory,
+			App = "/usr/bin/sudo /usr/bin/pacman -R " + string.Join(" ", packages),
 		};
-		process.Start();
-		process.WaitForExit();
-		if (process.ExitCode == 0)
+
+		try
 		{
-			MessageBox.Query(this.App, "Success", "Package(s) removed successfully.", "OK");
+			_terminal?.Dispose();
+			_terminal = await PtyProvider.SpawnAsync(ptyOptions, CancellationToken.None);
+			_terminal.ProcessExited += (_, processExitEventArgs) =>
+			{
+				this.App.Invoke(() =>
+				{
+					if (processExitEventArgs.ExitCode == 0)
+					{
+						MessageBox.Query(this.App, "Success", "Package(s) removed successfully.", "OK");
+					}
+					else
+					{
+						MessageBox.ErrorQuery(this.App, "Error", "Failed to remove package(s).", "OK");
+					}
+					_terminal?.Dispose();
+					_terminal = null;
+					this.RequestStop();
+				});
+			};
 		}
-		else
+		catch (Exception ex)
 		{
-			MessageBox.ErrorQuery(this.App, "Error", "Failed to remove package(s).", "OK");
+			MessageBox.ErrorQuery(this.App, "Error", $"Failed to run pacman: {ex.Message}", "OK");
 		}
-		this.RequestStop();
 	}
 }

@@ -5,6 +5,8 @@
 //      You can make changes to this file and they will not be overwritten when saving.
 //  </auto-generated>
 // -----------------------------------------------------------------------------
+using Porta.Pty;
+using System.Runtime.InteropServices;
 using Terminal.Gui;
 using Terminal.Gui.Views;
 
@@ -12,6 +14,8 @@ namespace ServerManager.Dialogs;
 
 public partial class InstallPackage
 {
+	private IPtyConnection? _terminal;
+
 	public InstallPackage()
 	{
 		InitializeComponent();
@@ -19,37 +23,47 @@ public partial class InstallPackage
 		cancelButton.Accepted += (s, e) => this.RequestStop();
 	}
 
-	private void InstallButtonAccepted(object? sender, EventArgs e)
+	private async void InstallButtonAccepted(object? sender, EventArgs e)
 	{
 		if (packagesField.Text == "")
 		{
 			MessageBox.ErrorQuery(this.App, "Error", "Please enter a package name.", "OK");
 			return;
 		}
-		// Create an list of packages separated by space
-		var packages = packagesField.Text.ToString().Split(' ').ToList();
-		var process = new System.Diagnostics.Process
+
+		var packages = packagesField.Text.ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+		var ptyOptions = new Porta.Pty.PtyOptions
 		{
-			StartInfo = new System.Diagnostics.ProcessStartInfo
-			{
-				FileName = "screen",
-				Arguments = "-S sudo /usr/bin/pacman -S " + string.Join(" ", packages),
-				RedirectStandardOutput = false,
-				RedirectStandardError = false,
-				UseShellExecute = true,
-				CreateNoWindow = false,
-			}
+			Name = "InstallPackage",
+			Cwd = Environment.CurrentDirectory,
+			App = "/usr/bin/sudo /usr/bin/pacman -S " + string.Join(" ", packages),
 		};
-		process.Start();
-		process.WaitForExit();
-		if (process.ExitCode == 0)
+
+		try
 		{
-			MessageBox.Query(this.App, "Success", "Package(s) installed successfully.", "OK");
+			_terminal?.Dispose();
+			_terminal = await PtyProvider.SpawnAsync(ptyOptions, CancellationToken.None);
+			_terminal.ProcessExited += (_, processExitEventArgs) =>
+			{
+				this.App.Invoke(() =>
+				{
+					if (processExitEventArgs.ExitCode == 0)
+					{
+						MessageBox.Query(this.App, "Success", "Package(s) installed successfully.", "OK");
+					}
+					else
+					{
+						MessageBox.ErrorQuery(this.App, "Error", "Failed to install package(s).", "OK");
+					}
+					_terminal?.Dispose();
+					_terminal = null;
+					this.RequestStop();
+				});
+			};
 		}
-		else
+		catch (Exception ex)
 		{
-			MessageBox.ErrorQuery(this.App, "Error", "Failed to install package(s).", "OK");
+			MessageBox.ErrorQuery(this.App, "Error", $"Failed to run pacman: {ex.Message}", "OK");
 		}
-		this.RequestStop();
 	}
 }
