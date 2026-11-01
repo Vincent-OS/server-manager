@@ -4,15 +4,19 @@
 //        TerminalGuiDesigner v2.4.5.0
 //      You can make changes to this file and they will not be overwritten when saving.
 //  </auto-generated>
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------- 
+#pragma warning disable CS0618 // This is necessary to put because Terminal.Gui needs this to run.
 using ServerManager.Dialogs;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Terminal.Gui;
 using Terminal.Gui.App;
+using Terminal.Gui.Input;
 using Terminal.Gui.Views;
 
 namespace ServerManager;
-	
+
 public partial class Program
 {
 	public Program()
@@ -27,65 +31,64 @@ public partial class Program
 		ramLabel.Text = SystemInfo.GetRAM().ToString();
 		storageLabel.Text = SystemInfo.GetTotalStorageBytes().ToString();
 		systemdServiceCode.Text = SystemInfo.GetServices();
+		journalctlCode.Text = SystemInfo.GetSystemLogs();
 		// Functions to link
-		installPackageButton.Accepted += InstallPackageButtonAccepted;
-		removePackageButton.Accepted += RemovePackageButtonAccepted;
-		servicesButton.Accepted += ServicesButtonAccepted;
 		hostnameLink.Accepted += HostnameLinkAccepted;
 		ipLink.Accepted += IPLinkAccepted;
 	}
 
 	public static void Main(string[] args)
 	{
-#pragma warning disable CS0618 // Suppress warning for obsolete Application.Run method
 		Application.Run<Program>();
-#pragma warning restore CS0618 // This is necessary to put because Terminal.Gui needs this to run.
 	}
+
 	#region Quick Action
-	private static void InstallPackageButtonAccepted(object? sender, EventArgs e)
+	private void InstallPackageButtonAccepted(object? sender, EventArgs e)
 	{
-		InstallPackage installPackage = new InstallPackage();
-		Application.Run(installPackage);
+		//InstallPackage installPackage = new InstallPackage();
+		//Application.Run(installPackage);
+		MessageBox.Query(this.App, "ERROR", "Not implemented", "OK");
 	}
 
-	private static void RemovePackageButtonAccepted(object? sender, EventArgs e)
+	private void RemovePackageButtonAccepted(object? sender, EventArgs e)
 	{
-		RemovePackage removePackage = new RemovePackage();
-		Application.Run(removePackage);
+		//RemovePackage removePackage = new RemovePackage();
+		//Application.Run(removePackage);
+		MessageBox.Query(this.App, "ERROR", "Not implemented", "OK");
 	}
 
-	private static void ServicesButtonAccepted(object? sender, EventArgs e)
+	private void ServicesButtonAccepted(object? sender, EventArgs e)
 	{
-		
+		MessageBox.Query(this.App, "ERROR", "Not implemented", "OK");
 	}
 	#endregion
 	#region System Information
-	private static void HostnameLinkAccepted(object? sender, EventArgs e)
+	private void HostnameLinkAccepted(object? sender, EventArgs e)
 	{
-		var process = new System.Diagnostics.Process
-		{
-			StartInfo = new System.Diagnostics.ProcessStartInfo
-			{
-				FileName = "hostnamectl",
-				UseShellExecute = true,
-				CreateNoWindow = false
-			}
-		};
-		process.Start();
+		ChangeHostname changeHostname = new ChangeHostname();
+		Application.Run(changeHostname);
 	}
 
-	private static void IPLinkAccepted(object? sender, EventArgs e)
+	private void IPLinkAccepted(object? sender, EventArgs e)
 	{
-		var process = new System.Diagnostics.Process
+		try
 		{
-			StartInfo = new System.Diagnostics.ProcessStartInfo
+			var process = new System.Diagnostics.Process
 			{
-				FileName = "nmtui",
-				UseShellExecute = true,
-				CreateNoWindow = false
-			}
-		};
-		process.Start();
+				StartInfo = new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "nmtui",
+					UseShellExecute = false,
+					CreateNoWindow = false
+				}
+			};
+			process.Start();
+			process.WaitForExit();
+		}
+		catch (Exception ex)
+		{
+			MessageBox.ErrorQuery(this.App, "Error", $"{ex.Message}", "OK");
+		}
 	}
 	#endregion
 }

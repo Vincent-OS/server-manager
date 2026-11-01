@@ -8,30 +8,30 @@ namespace ServerManager;
 
 public class SystemInfo
 {
-    #region System Information
-    public static string GetLocalIPAddresses()
+	#region System Information
+	public static string GetLocalIPAddresses()
 	{
 		IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-        var ipv4Addresses = localIPs
-            .Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            .ToList();
-        var ipv6Addresses = localIPs
-            .Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
-            .ToList();
-        string ipv4Result = ipv4Addresses.Count switch
-        {
-            0 => IPAddress.Loopback.ToString(),
-            1 => ipv4Addresses[0].ToString(),
-            _ => "Multiple IP Addresses"
-        };
-        if (ipv6Addresses.Count > 0)
-        {
-            return string.Join(", ", ipv4Result) + ", Compatible IPv6";
-        }
-        else
-        {
-            return string.Join(", ", ipv4Result);
-        }
+		var ipv4Addresses = localIPs
+			.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+			.ToList();
+		var ipv6Addresses = localIPs
+			.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+			.ToList();
+		string ipv4Result = ipv4Addresses.Count switch
+		{
+			0 => IPAddress.Loopback.ToString(),
+			1 => ipv4Addresses[0].ToString(),
+			_ => "Multiple IP Addresses"
+		};
+		if (ipv6Addresses.Count > 0)
+		{
+			return string.Join(", ", ipv4Result) + ", Compatible IPv6";
+		}
+		else
+		{
+			return string.Join(", ", ipv4Result);
+		}
 	}
 
 	// ! This implementation depends on the system having the following file:
@@ -69,6 +69,7 @@ public class SystemInfo
 	{
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
+			if (!Directory.Exists("/etc/apparmor")) return "Unknown";
 			var grubLSMLine = File.ReadAllLines("/etc/default/grub").FirstOrDefault(line => line.StartsWith("GRUB_CMDLINE_LINUX="));
 			switch (grubLSMLine)
 			{
@@ -111,31 +112,54 @@ public class SystemInfo
 		return "Unknown";
 	}
 
-    public static string GetServices()
-    {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var process = new System.Diagnostics.Process
-            {
-                StartInfo = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = "systemctl",
-                    Arguments = "list-units --type=service",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                }
-            };
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-            return output;
-        }
-        return "Unknown";
-    }
-    #endregion
-    #region Format
-    public static string FormatMemorySize(long kb)
+	public static string GetServices()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		{
+			var process = new System.Diagnostics.Process
+			{
+				StartInfo = new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "systemctl",
+					Arguments = "list-units --type=service",
+					RedirectStandardOutput = true,
+					UseShellExecute = false,
+					CreateNoWindow = true,
+				}
+			};
+			process.Start();
+			string output = process.StandardOutput.ReadToEnd();
+			process.WaitForExit();
+			return output;
+		}
+		return "Unknown";
+	}
+
+	public static string GetSystemLogs()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+		{
+			var process = new System.Diagnostics.Process
+			{
+				StartInfo = new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = "journalctl",
+					Arguments = "-b -e",
+					RedirectStandardOutput = true,
+					UseShellExecute = false,
+					CreateNoWindow = true
+				}
+			};
+			process.Start();
+			string output = process.StandardOutput.ReadToEnd();
+			process.WaitForExit();
+			return output;
+		}
+		return "Unknown";
+	}
+	#endregion
+	#region Format
+	public static string FormatMemorySize(long kb)
 	{
 		string[] sizes = { "KB", "MB", "GB", "TB" };
 		double len = kb;
@@ -177,5 +201,5 @@ public class SystemInfo
 
 		return $"{len:0.##} {sizes[order]}";
 	}
-    #endregion
+	#endregion
 }
