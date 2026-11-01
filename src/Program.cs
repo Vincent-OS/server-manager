@@ -45,19 +45,21 @@ public partial class Program
 	#region Quick Action
 	private void InstallPackageButtonAccepted(object? sender, EventArgs e)
 	{
-		InstallPackage installPackage = new InstallPackage();
-		Application.Run(installPackage);
+		//InstallPackage installPackage = new InstallPackage();
+		//Application.Run(installPackage);
+		MessageBox.Query(this.App, "ERROR", "Not implemented", "OK");
 	}
 
 	private void RemovePackageButtonAccepted(object? sender, EventArgs e)
 	{
-		RemovePackage removePackage = new RemovePackage();
-		Application.Run(removePackage);
+		//RemovePackage removePackage = new RemovePackage();
+		//Application.Run(removePackage);
+		MessageBox.Query(this.App, "ERROR", "Not implemented", "OK");
 	}
 
 	private void ServicesButtonAccepted(object? sender, EventArgs e)
 	{
-		MessageBox.Query(this.App, "TITLE", "Not implemented", "OK");
+		MessageBox.Query(this.App, "ERROR", "Not implemented", "OK");
 	}
 	#endregion
 	#region System Information

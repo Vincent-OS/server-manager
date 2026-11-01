@@ -318,7 +318,7 @@ namespace ServerManager {
             this.aboutVincentOSServerManagerMenuItem.Title = "About Vincent OS Server Manager";
             this.aboutVincentOSServerManagerMenuItem.Action = () =>
 			{
-				MessageBox.Query(this.App, "About Vincent OS Server Manager", "Server Manager\nVersion: 1.0.0\nAuthor: v38armageddon", "OK");
+				MessageBox.Query(this.App, "About Vincent OS Server Manager", "Server Manager\nVersion: 0.0.1\nAuthor: v38armageddon", "OK");
 			};
             this.exitMenuItem = new Terminal.Gui.Views.MenuItem();
             this.exitMenuItem.Title = "Exit";
